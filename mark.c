@@ -143,7 +143,7 @@ GC_INNER void GC_set_hdr_marks(hdr *hhdr)
 
 #   ifdef USE_MARK_BYTES
       for (i = 0; i <= n_marks; i += (unsigned)MARK_BIT_OFFSET(sz)) {
-        hhdr -> hb_marks[i] = 1;
+        hhdr -> hb_marks[i] = MANAGED_MARKED;
       }
 #   else
       for (i = 0; i < divWORDSZ(n_marks + WORDSZ); ++i) {
