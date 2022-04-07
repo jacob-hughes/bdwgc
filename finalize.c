@@ -1015,7 +1015,7 @@ GC_INNER void GC_finalize(void)
       prev_fo = 0;
       while (curr_fo != 0) {
         real_ptr = (ptr_t)GC_REVEAL_POINTER(curr_fo->fo_hidden_base);
-        if (GC_is_managed_unmarked(real_ptr)) {
+        if (!GC_is_marked(real_ptr) && GC_is_managed(real_ptr)) {
             if (!GC_java_finalization) {
               GC_set_mark_bit(real_ptr);
             }
