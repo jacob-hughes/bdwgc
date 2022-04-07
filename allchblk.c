@@ -952,7 +952,8 @@ GC_INNER void GC_freehblk(struct hblk *hbp)
 
     // Clear all the mark bytes to prevent blocks from lingering as managed.
     // Instead, this should only be opted-in on each allocation.
-    BZERO(hhdr->hb_marks, sizeof(hhdr->hb_marks));
+    if(!IS_UNCOLLECTABLE(hhdr->hb_obj_kind)) BZERO(hhdr->hb_marks, sizeof(hhdr->hb_marks));
+
     hhdr->hb_sz = size;
 #   ifdef USE_MUNMAP
       hhdr -> hb_last_reclaimed = (unsigned short)GC_gc_no;
