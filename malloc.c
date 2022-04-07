@@ -618,14 +618,16 @@ GC_API void GC_CALL GC_free(void * p)
 
         LOCK();
         GC_bytes_freed += sz;
-        if (IS_UNCOLLECTABLE(knd)) GC_non_gc_bytes -= sz;
+        if (IS_UNCOLLECTABLE(knd)) {
+            GC_non_gc_bytes -= sz;
                 /* Its unnecessary to clear the mark bit.  If the       */
                 /* object is reallocated, it doesn't matter.  O.w. the  */
                 /* collector will do it, since it's on a free list.     */
-
-        // Set the block back to unmanaged.
-        word bit_no = MARK_BIT_NO((ptr_t)p - (ptr_t)h, hhdr -> hb_sz);
-        clear_managed_bit_from_hdr(hhdr, bit_no);
+        } else {
+            // Set the block back to unmanaged.
+            word bit_no = MARK_BIT_NO((ptr_t)p - (ptr_t)h, hhdr -> hb_sz);
+            clear_managed_bit_from_hdr(hhdr, bit_no);
+        }
 
         if (ok -> ok_init && EXPECT(sz > sizeof(word), TRUE)) {
             BZERO((word *)p + 1, sz-sizeof(word));
