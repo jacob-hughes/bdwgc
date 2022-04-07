@@ -998,7 +998,7 @@ GC_INNER void GC_finalize(void)
            curr_fo != NULL; curr_fo = fo_next(curr_fo)) {
         GC_ASSERT(GC_size(curr_fo) >= sizeof(struct finalizable_object));
         real_ptr = (ptr_t)GC_REVEAL_POINTER(curr_fo->fo_hidden_base);
-        if (GC_is_managed_unmarked(real_ptr)) {
+        if (!GC_is_marked(real_ptr) && GC_is_managed(real_ptr)) {
             GC_MARKED_FOR_FINALIZATION(real_ptr);
             GC_MARK_FO(real_ptr, curr_fo -> fo_mark_proc);
             if (GC_is_managed_marked(real_ptr)) {
