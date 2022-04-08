@@ -427,7 +427,7 @@ GC_API GC_ATTR_MALLOC void * GC_CALL GC_generic_malloc_uncollectable(
 /* Allocate lb bytes of pointerful, traced, but not collectible data.   */
 GC_API GC_ATTR_MALLOC void * GC_CALL GC_malloc_uncollectable(size_t lb)
 {
-  return GC_generic_malloc_uncollectable(lb, UNCOLLECTABLE);
+  return GC_malloc_unmanaged(lb);
 }
 
 #ifdef GC_ATOMIC_UNCOLLECTABLE
