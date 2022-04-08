@@ -999,6 +999,9 @@ GC_INNER void GC_finalize(void)
         GC_ASSERT(GC_size(curr_fo) >= sizeof(struct finalizable_object));
         real_ptr = (ptr_t)GC_REVEAL_POINTER(curr_fo->fo_hidden_base);
         if (!GC_is_marked(real_ptr) && GC_is_managed(real_ptr)) {
+            struct hblk *h = HBLKPTR(real_ptr);
+            hdr * hhdr = HDR(h);
+            assert(!IS_UNCOLLECTABLE(hhdr->hb_obj_kind));
             GC_MARKED_FOR_FINALIZATION(real_ptr);
             GC_MARK_FO(real_ptr, curr_fo -> fo_mark_proc);
             if (GC_is_managed_marked(real_ptr)) {
