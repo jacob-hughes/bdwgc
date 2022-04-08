@@ -213,7 +213,7 @@ GC_API void GC_CALL GC_set_managed(const void *p)
     hdr * hhdr = HDR(h);
     word bit_no = MARK_BIT_NO((ptr_t)p - (ptr_t)h, hhdr -> hb_sz);
 
-    GC_ASSERT(!managed_bit_is_set(hhdr, bit_no));
+    /* GC_ASSERT(!managed_bit_is_set(hhdr, bit_no)); */
 
     set_managed_bit_from_hdr(hhdr, bit_no);
 }
