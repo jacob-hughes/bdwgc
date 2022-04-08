@@ -1019,6 +1019,9 @@ GC_INNER void GC_finalize(void)
       while (curr_fo != 0) {
         real_ptr = (ptr_t)GC_REVEAL_POINTER(curr_fo->fo_hidden_base);
         if (!GC_is_marked(real_ptr) && GC_is_managed(real_ptr)) {
+            struct hblk *h = HBLKPTR(real_ptr);
+            hdr * hhdr = HDR(h);
+            assert(!IS_UNCOLLECTABLE(hhdr->hb_obj_kind));
             if (!GC_java_finalization) {
               GC_set_mark_bit(real_ptr);
             }
