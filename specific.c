@@ -215,21 +215,16 @@ GC_INNER void * GC_slow_getspecific(tsd * key, word qtid,
   }
 #endif /* GC_ASSERTIONS */
 
-STATIC __thread GC_key_t tls_rootset_key = 0;
+STATIC __thread void* tls_rootset = NULL;
 
-GC_INNER GC_key_t GC_init_tls_rootset()
+GC_INNER void GC_init_tls_rootset(void * rootset)
 {
-    GC_key_t key = 0;
-    int r = GC_key_create_inner(&key);
-    GC_ASSERT(r == 0);
-    GC_ASSERT(key != 0);
-    tls_rootset_key = key;
-    return key;
+    tls_rootset = rootset;
 }
 
-GC_INNER GC_key_t GC_get_tls_rootset_key()
+GC_INNER void* GC_tls_rootset()
 {
-    return tls_rootset_key;
+    return tls_rootset;
 }
 
 #endif /* USE_CUSTOM_SPECIFIC */
