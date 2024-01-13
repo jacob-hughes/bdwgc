@@ -106,6 +106,9 @@ typedef struct thread_specific_data {
 
 typedef tsd * GC_key_t;
 
+GC_INNER GC_key_t GC_init_tls_rootset();
+GC_INNER GC_key_t GC_get_tls_rootset_key();
+
 #define GC_key_create(key, d) GC_key_create_inner(key)
 GC_INNER int GC_key_create_inner(tsd ** key_ptr);
 GC_INNER int GC_setspecific(tsd * key, void * value);
