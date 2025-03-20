@@ -619,6 +619,9 @@ static void free_internal(void *p, const hdr *hhdr)
   size_t lg = BYTES_TO_GRANULES(lb);    /* size in granules */
   int k = hhdr -> hb_obj_kind;
 
+  if (GC_finalizer_thread == NUMERIC_THREAD_ID(pthread_self()))
+    GC_total_objects_reclaimed++;
+
   GC_bytes_freed += lb;
   if (IS_UNCOLLECTABLE(k)) GC_non_gc_bytes -= lb;
   if (EXPECT(lg <= MAXOBJGRANULES, TRUE)) {
