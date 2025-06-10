@@ -2490,6 +2490,7 @@ GC_EXTERN void (*GC_print_heap_obj)(ptr_t p);
   /* message character strings from the executable (with a particular   */
   /* level of optimizations).                                           */
 # define GC_print_stats 0
+# define GC_benchmark 0
 #endif
 
 #ifdef KEEP_BACK_PTRS

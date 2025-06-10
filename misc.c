@@ -92,6 +92,7 @@ GC_bool GC_quiet = 0; /* used also in pcr_interface.c */
 
 #if !defined(NO_CLOCK) || !defined(SMALL_CONFIG)
   GC_INNER int GC_print_stats = 0;
+  GC_INNER int GC_benchmark = 0;
 #endif
 
 #ifdef GC_PRINT_BACK_HEIGHT
