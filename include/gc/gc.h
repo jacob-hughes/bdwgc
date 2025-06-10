@@ -423,6 +423,10 @@ GC_API GC_word GC_CALL GC_get_allocd_bytes_per_finalizer(void);
 /* library has been compiled without NO_CLOCK.                          */
 GC_API void GC_CALL GC_start_performance_measurement(void);
 
+/* Tell the collector to log performance and memory measurements from   */
+/* each collection to GC_LOG_FILE.                                      */
+GC_API void GC_CALL GC_enable_benchmark_stats(void);
+
 /* Get the total time of all full collections since the start of the    */
 /* performance measurements.  Includes time spent in the supplementary  */
 /* actions like blacklists promotion, marks clearing, free lists        */
