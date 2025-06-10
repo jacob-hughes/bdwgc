@@ -1118,6 +1118,9 @@ GC_API void GC_CALL GC_init(void)
           GC_print_stats = 1;
         }
 #     endif
+    if (0 != GETENV("GC_BENCHMARK_STATS")) {
+          GC_benchmark = 1;
+    }
 #   endif
 #   if ((defined(UNIX_LIKE) && !defined(GC_ANDROID_LOG)) \
         || (defined(CONSOLE_LOG) && defined(MSWIN32)) \
