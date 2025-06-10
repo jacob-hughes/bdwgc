@@ -1444,21 +1444,30 @@ GC_INNER void GC_notify_or_invoke_finalizers(void)
     const struct finalizable_object *fo;
     unsigned long ready = 0;
 
-    GC_log_printf("%lu finalization entries;"
-                  " %lu/%lu short/long disappearing links alive\n",
-                  (unsigned long)GC_fo_entries,
-                  (unsigned long)GC_dl_hashtbl.entries,
-                  (unsigned long)IF_LONG_REFS_PRESENT_ELSE(
-                                                GC_ll_hashtbl.entries, 0));
+    if (GC_print_stats)
+        GC_log_printf("%lu finalization entries;"
+                      " %lu/%lu short/long disappearing links alive\n",
+                      (unsigned long)GC_fo_entries,
+                      (unsigned long)GC_dl_hashtbl.entries,
+                      (unsigned long)IF_LONG_REFS_PRESENT_ELSE(
+                                                    GC_ll_hashtbl.entries, 0));
+
+    if (GC_benchmark)
+        GC_log_printf("%lu,",
+                      (unsigned long)GC_fo_entries);
 
     for (fo = GC_fnlz_roots.finalize_now; fo != NULL; fo = fo_next(fo))
       ++ready;
-    GC_log_printf("%lu finalization-ready objects;"
-                  " %ld/%ld short/long links cleared\n",
-                  ready,
-                  (long)GC_old_dl_entries - (long)GC_dl_hashtbl.entries,
-                  (long)IF_LONG_REFS_PRESENT_ELSE(
-                              GC_old_ll_entries - GC_ll_hashtbl.entries, 0));
+    if (GC_print_stats)
+        GC_log_printf("%lu finalization-ready objects;"
+                      " %ld/%ld short/long links cleared\n",
+                      ready,
+                      (long)GC_old_dl_entries - (long)GC_dl_hashtbl.entries,
+                      (long)IF_LONG_REFS_PRESENT_ELSE(
+                                  GC_old_ll_entries - GC_ll_hashtbl.entries, 0));
+    if (GC_benchmark)
+        GC_log_printf("%lu,",
+                      (unsigned long)ready);
   }
 #endif /* !SMALL_CONFIG */
 

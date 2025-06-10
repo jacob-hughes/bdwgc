@@ -2484,11 +2484,13 @@ GC_EXTERN void (*GC_print_heap_obj)(ptr_t p);
   /* Value 1 generates basic GC log;            */
   /* VERBOSE generates additional messages.     */
   GC_EXTERN int GC_print_stats;
+  GC_EXTERN int GC_benchmark;
 #else /* SMALL_CONFIG */
   /* Defined as a macro to aid the compiler to remove the relevant      */
   /* message character strings from the executable (with a particular   */
   /* level of optimizations).                                           */
 # define GC_print_stats 0
+# define GC_benchmark 0
 #endif
 
 #ifdef KEEP_BACK_PTRS
@@ -2752,6 +2754,8 @@ GC_API_PRIV void GC_log_printf(const char * format, ...)
 #endif
 
 /* Convenient macros for GC_[verbose_]log_printf invocation.    */
+#define GC_BENCHMARK_LOG_PRINTF \
+                if (EXPECT(!GC_benchmark, TRUE)) {} else GC_log_printf
 #define GC_COND_LOG_PRINTF \
                 if (EXPECT(!GC_print_stats, TRUE)) {} else GC_log_printf
 #define GC_VERBOSE_LOG_PRINTF \
