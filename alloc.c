@@ -70,6 +70,14 @@ word GC_gc_no = 0;
     measure_performance = TRUE;
   }
 
+  GC_API void GC_CALL GC_enable_benchmark_stats(void)
+  {
+    const char *fname = TRUSTED_STRING(GETENV("GC_LOG_FILE"));
+    if (NULL == fname)
+      return;
+    GC_benchmark = 1;
+  }
+
   GC_API unsigned long GC_CALL GC_get_full_gc_total_time(void)
   {
     return full_gc_total_time;
