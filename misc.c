@@ -2807,3 +2807,8 @@ GC_API size_t GC_CALL GC_get_hblk_size(void)
 {
     return (size_t)HBLKSIZE;
 }
+
+GC_API void GC_CALL GC_log_metric(GC_word value)
+{
+    GC_BENCHMARK_LOG_PRINTF("%lu,", (unsigned long) value);
+}
