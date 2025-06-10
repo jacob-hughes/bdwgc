@@ -2753,6 +2753,33 @@ GC_API_PRIV void GC_log_printf(const char * format, ...)
 # define GC_ERRINFO_PRINTF GC_log_printf
 #endif
 
+#define GC_BENCHMARK_LOG_MAYBE_HEADER() \
+    do { \
+        if (GC_benchmark && GC_gc_no == 0) { \
+            GC_BENCHMARK_LOG_PRINTF( \
+                "collection_number," \
+                "kind," \
+                "heap_size_on_entry," \
+                "time_marking_ms," \
+                "time_marking_ns," \
+                "bytes_freed," \
+                "live_objects_with_finalizers," \
+                "objects_in_finalizer_queue," \
+                "time_fin_q_ms," \
+                "time_fin_q_ns," \
+                "time_sweeping_ms," \
+                "time_sweeping_ns," \
+                "time_total_ms," \
+                "time_total_ns," \
+                "finalizers_run," \
+                "finalizers_registered," \
+                "allocated_gc," \
+                "allocated_rc," \
+                "allocated_boxed\n" \
+            ); \
+        } \
+    } while (0)
+
 /* Convenient macros for GC_[verbose_]log_printf invocation.    */
 #define GC_BENCHMARK_LOG_PRINTF \
                 if (EXPECT(!GC_benchmark, TRUE)) {} else GC_log_printf

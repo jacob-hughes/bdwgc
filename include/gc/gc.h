@@ -427,6 +427,13 @@ GC_API void GC_CALL GC_start_performance_measurement(void);
 /* each collection to GC_LOG_FILE.                                      */
 GC_API void GC_CALL GC_enable_benchmark_stats(void);
 
+GC_API void GC_CALL GC_log_metrics(GC_word finalizers_run,
+                                  GC_word finalizers_registered,
+                                  GC_word allocated_gc,
+                                  GC_word allocated_rc,
+                                  GC_word allocated_boxed,
+                                  int final);
+
 /* Get the total time of all full collections since the start of the    */
 /* performance measurements.  Includes time spent in the supplementary  */
 /* actions like blacklists promotion, marks clearing, free lists        */
@@ -435,6 +442,10 @@ GC_API void GC_CALL GC_enable_benchmark_stats(void);
 /* The function does not use any synchronization.  Defined only if the  */
 /* library has been compiled without NO_CLOCK.                          */
 GC_API unsigned long GC_CALL GC_get_full_gc_total_time(void);
+
+GC_API unsigned GC_CALL GC_get_full_gc_total_ns_frac(void);
+
+GC_API unsigned long GC_CALL GC_get_total_finalization_ready_objects(void);
 
 /* Same as GC_get_full_gc_total_time but takes into account all mark    */
 /* phases with the world stopped and nothing else.                      */

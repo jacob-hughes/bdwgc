@@ -83,6 +83,11 @@ word GC_gc_no = 0;
     return full_gc_total_time;
   }
 
+  GC_API unsigned GC_CALL GC_get_full_gc_total_ns_frac(void)
+  {
+    return full_gc_total_ns_frac;
+  }
+
   GC_API unsigned long GC_CALL GC_get_stopped_mark_total_time(void)
   {
     return stopped_mark_total_time;
@@ -501,24 +506,7 @@ STATIC void GC_maybe_gc(void)
     GC_COND_LOG_PRINTF(
                 "***>Full mark for collection #%lu after %lu allocd bytes\n",
                 (unsigned long)GC_gc_no + 1, (unsigned long)GC_bytes_allocd);
-    if (GC_benchmark && GC_gc_no == 0) {
-        GC_BENCHMARK_LOG_PRINTF(
-            "collection_number,"
-            "kind,"
-            "heap_size_on_entry,"
-            "time_marking_ms,"
-            "time_marking_ns,"
-            "bytes_freed,"
-            "live_objects_with_finalizers,"
-            "objects_in_finalizer_queue,"
-            "time_fin_q_ms,"
-            "time_fin_q_ns,"
-            "time_sweeping_ms,"
-            "time_sweeping_ns,"
-            "time_total_ms,"
-            "time_total_ns\n"
-        );
-    }
+    GC_BENCHMARK_LOG_MAYBE_HEADER();
     GC_BENCHMARK_LOG_PRINTF("%lu,major,%lu,",(unsigned long)GC_gc_no + 1,(unsigned long)GC_bytes_allocd);
     GC_promote_black_lists();
     (void)GC_reclaim_all((GC_stop_func)0, TRUE);
@@ -660,7 +648,7 @@ GC_INNER GC_bool GC_try_to_collect_inner(GC_stop_func stop_func)
           GC_log_printf("Complete collection took %lu ms %lu ns\n",
                         time_diff, ns_frac_diff);
         if (GC_benchmark)
-          GC_log_printf("%lu,%lu\n",time_diff, ns_frac_diff);
+          GC_log_printf("%lu,%lu,",time_diff, ns_frac_diff);
       }
 #   endif
     if (GC_on_collection_event)
@@ -872,24 +860,7 @@ STATIC GC_bool GC_stopped_mark(GC_stop_func stop_func)
     GC_COND_LOG_PRINTF(
               "\n--> Marking for collection #%lu after %lu allocated bytes\n",
               (unsigned long)GC_gc_no + 1, (unsigned long)GC_bytes_allocd);
-    if (GC_benchmark && GC_gc_no == 0) {
-        GC_BENCHMARK_LOG_PRINTF(
-            "collection_number,"
-            "kind,"
-            "heap_size_on_entry,"
-            "time_marking_ms,"
-            "time_marking_ns,"
-            "bytes_freed,"
-            "live_objects_with_finalizers,"
-            "objects_in_finalizer_queue,"
-            "time_fin_q_ms,"
-            "time_fin_q_ns,"
-            "time_sweeping_ms,"
-            "time_sweeping_ns,"
-            "time_total_ms,"
-            "time_total_ns\n"
-        );
-    }
+    GC_BENCHMARK_LOG_MAYBE_HEADER();
     GC_BENCHMARK_LOG_PRINTF("%lu,minor,%lu,",(unsigned long)GC_gc_no + 1,(unsigned long)GC_bytes_allocd);
 
 #   ifndef NO_CLOCK
