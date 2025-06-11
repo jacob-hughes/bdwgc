@@ -14,6 +14,7 @@
  * modified is included with the above copyright notice.
  */
 
+#include "include/gc/gc.h"
 #include "private/gc_pmark.h"
 
 #include <limits.h>
@@ -2806,4 +2807,42 @@ GC_API void GC_CALL GC_abort_on_oom(void)
 GC_API size_t GC_CALL GC_get_hblk_size(void)
 {
     return (size_t)HBLKSIZE;
+}
+
+GC_API void GC_CALL GC_log_metrics(GC_word finalizers_run,
+                                  GC_word finalizers_registered,
+                                  GC_word allocated_gc,
+                                  GC_word allocated_rc,
+                                  GC_word allocated_boxed,
+                                  int final)
+{
+    if (final == 1) {
+        GC_BENCHMARK_LOG_MAYBE_HEADER();
+        GC_BENCHMARK_LOG_PRINTF("-1," // Sentinel collection number
+                                "final," // Kind
+                                "%lu,"
+                                "0,"    // Time marking ms (n/a)
+                                "0,"    // Time marking ns (n/a)
+                                "0,"    // Bytes freed (n/a)
+                                "%lu,%lu,"
+                                "0,"    // Time in fin q ms (n/a)
+                                "0,"    // Time in fin q ns (n/a)
+                                "0,"    // Time sweeping ms (n/a)
+                                "0,"    // Time sweeping ns (n/a)
+                                "%lu,%u,",
+                                (unsigned long) GC_bytes_allocd,
+                                (unsigned long) GC_fo_entries,
+                                GC_get_total_finalization_ready_objects(),
+                                GC_get_full_gc_total_time(),
+                                GC_get_full_gc_total_ns_frac());
+
+
+    }
+    GC_BENCHMARK_LOG_PRINTF("%lu,%lu,%lu,%lu,%lu\n",
+                            (unsigned long) finalizers_run,
+                            (unsigned long) finalizers_registered,
+                            (unsigned long) allocated_gc,
+                            (unsigned long) allocated_rc,
+                            (unsigned long) allocated_boxed);
+
 }

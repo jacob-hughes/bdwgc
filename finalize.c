@@ -1439,6 +1439,15 @@ GC_INNER void GC_notify_or_invoke_finalizers(void)
 #   define IF_LONG_REFS_PRESENT_ELSE(x,y) (y)
 # endif
 
+  GC_API unsigned long GC_CALL GC_get_total_finalization_ready_objects(void)
+  {
+    const struct finalizable_object *fo;
+    unsigned long ready = 0;
+    for (fo = GC_fnlz_roots.finalize_now; fo != NULL; fo = fo_next(fo))
+      ++ready;
+    return ready;
+  }
+
   GC_INNER void GC_print_finalization_stats(void)
   {
     const struct finalizable_object *fo;
