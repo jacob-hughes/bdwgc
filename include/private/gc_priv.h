@@ -2755,7 +2755,7 @@ GC_API_PRIV void GC_log_printf(const char * format, ...)
 
 #define GC_BENCHMARK_LOG_MAYBE_HEADER() \
     do { \
-        if (GC_benchmark && GC_gc_no == 0) { \
+        if (GC_benchmark && GC_get_gc_no() == 0) { \
             GC_BENCHMARK_LOG_PRINTF( \
                 "collection_number," \
                 "kind," \
@@ -2774,6 +2774,7 @@ GC_API_PRIV void GC_log_printf(const char * format, ...)
                 "finalizers_run," \
                 "finalizers_registered," \
                 "allocated_gc," \
+                "allocated_arc," \
                 "allocated_rc," \
                 "allocated_boxed\n" \
             ); \

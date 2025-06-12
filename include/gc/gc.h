@@ -430,6 +430,7 @@ GC_API void GC_CALL GC_enable_benchmark_stats(void);
 GC_API void GC_CALL GC_log_metrics(GC_word finalizers_run,
                                   GC_word finalizers_registered,
                                   GC_word allocated_gc,
+                                  GC_word allocated_arc,
                                   GC_word allocated_rc,
                                   GC_word allocated_boxed,
                                   int final);

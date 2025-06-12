@@ -2812,6 +2812,7 @@ GC_API size_t GC_CALL GC_get_hblk_size(void)
 GC_API void GC_CALL GC_log_metrics(GC_word finalizers_run,
                                   GC_word finalizers_registered,
                                   GC_word allocated_gc,
+                                  GC_word allocated_arc,
                                   GC_word allocated_rc,
                                   GC_word allocated_boxed,
                                   int final)
@@ -2838,10 +2839,11 @@ GC_API void GC_CALL GC_log_metrics(GC_word finalizers_run,
 
 
     }
-    GC_BENCHMARK_LOG_PRINTF("%lu,%lu,%lu,%lu,%lu\n",
+    GC_BENCHMARK_LOG_PRINTF("%lu,%lu,%lu,%lu,%lu,%lu\n",
                             (unsigned long) finalizers_run,
                             (unsigned long) finalizers_registered,
                             (unsigned long) allocated_gc,
+                            (unsigned long) allocated_arc,
                             (unsigned long) allocated_rc,
                             (unsigned long) allocated_boxed);
 
