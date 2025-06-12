@@ -2774,6 +2774,7 @@ GC_API_PRIV void GC_log_printf(const char * format, ...)
                 "finalizers_run," \
                 "finalizers_registered," \
                 "allocated_gc," \
+                "allocated_arc," \
                 "allocated_rc," \
                 "allocated_boxed\n" \
             ); \
