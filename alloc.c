@@ -15,6 +15,7 @@
  * modified is included with the above copyright notice.
  */
 
+#include "gc/gc.h"
 #include "private/gc_priv.h"
 
 /*
@@ -507,7 +508,11 @@ STATIC void GC_maybe_gc(void)
                 "***>Full mark for collection #%lu after %lu allocd bytes\n",
                 (unsigned long)GC_gc_no + 1, (unsigned long)GC_bytes_allocd);
     GC_BENCHMARK_LOG_MAYBE_HEADER();
-    GC_BENCHMARK_LOG_PRINTF("%lu,major,%lu,",(unsigned long)GC_gc_no + 1,(unsigned long)GC_bytes_allocd);
+    GC_BENCHMARK_LOG_PRINTF("%lu,major,%lu,%lu,%lu,",
+                            (unsigned long)GC_gc_no + 1,
+                            (unsigned long)GC_bytes_allocd,
+                            (unsigned long)GC_get_heap_size(),
+                            (unsigned long)GC_bytes_freed);
     GC_promote_black_lists();
     (void)GC_reclaim_all((GC_stop_func)0, TRUE);
     GC_notify_full_gc();
@@ -647,8 +652,9 @@ GC_INNER GC_bool GC_try_to_collect_inner(GC_stop_func stop_func)
         if (GC_print_stats)
           GC_log_printf("Complete collection took %lu ms %lu ns\n",
                         time_diff, ns_frac_diff);
-        if (GC_benchmark)
-          GC_log_printf("%lu,%lu,",time_diff, ns_frac_diff);
+
+        GC_BENCHMARK_LOG_PRINTF("%lu,%lu", time_diff, ns_frac_diff);
+        GC_BENCHMARK_LOG_PRINTF("%ld,", GC_get_heap_size());
       }
 #   endif
     if (GC_on_collection_event)
@@ -861,8 +867,11 @@ STATIC GC_bool GC_stopped_mark(GC_stop_func stop_func)
               "\n--> Marking for collection #%lu after %lu allocated bytes\n",
               (unsigned long)GC_gc_no + 1, (unsigned long)GC_bytes_allocd);
     GC_BENCHMARK_LOG_MAYBE_HEADER();
-    GC_BENCHMARK_LOG_PRINTF("%lu,minor,%lu,",(unsigned long)GC_gc_no + 1,(unsigned long)GC_bytes_allocd);
-
+    GC_BENCHMARK_LOG_PRINTF("%lu,major,%lu,%lu,%lu,",
+                            (unsigned long)GC_gc_no + 1,
+                            (unsigned long)GC_bytes_allocd,
+                            (unsigned long)GC_get_heap_size(),
+                            (unsigned long)GC_bytes_freed);
 #   ifndef NO_CLOCK
       if (GC_PRINT_STATS_FLAG || measure_performance || GC_benchmark) {
         GET_TIME(start_time);
@@ -1284,6 +1293,8 @@ STATIC void GC_finish_collection(void)
 #   endif
     GC_ASSERT(GC_our_mem_bytes >= GC_heapsize);
     GC_BENCHMARK_LOG_PRINTF("%ld,", (long)GC_bytes_found);
+    GC_BENCHMARK_LOG_PRINTF("%ld,", (long)GC_bytes_finalized);
+    GC_BENCHMARK_LOG_PRINTF("%ld,", (long)GC_finalizer_bytes_freed);
     GC_DBGLOG_PRINTF("GC #%lu freed %ld bytes, heap %lu KiB ("
                      IF_USE_MUNMAP("+ %lu KiB unmapped ")
                      "+ %lu KiB internal)\n",

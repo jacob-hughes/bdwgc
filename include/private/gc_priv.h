@@ -1675,10 +1675,10 @@ GC_API_PRIV GC_FAR struct _GC_arrays GC_arrays;
 #define GC_bytes_dropped GC_arrays._bytes_dropped
 #define GC_bytes_finalized GC_arrays._bytes_finalized
 #define GC_bytes_freed GC_arrays._bytes_freed
+#define GC_bytes_swept GC_arrays._bytes_swept
 #define GC_composite_in_use GC_arrays._composite_in_use
 #define GC_excl_table GC_arrays._excl_table
 #define GC_finalizer_bytes_freed GC_arrays._finalizer_bytes_freed
-#define GC_finalizers_run GC_arrays._finalizers_run
 #define GC_total_objects_reclaimed GC_arrays._total_objects_reclaimed
 #define GC_heapsize GC_arrays._heapsize
 #define GC_large_allocd_bytes GC_arrays._large_allocd_bytes
@@ -2759,24 +2759,30 @@ GC_API_PRIV void GC_log_printf(const char * format, ...)
             GC_BENCHMARK_LOG_PRINTF( \
                 "collection_number," \
                 "kind," \
-                "heap_size_on_entry," \
-                "time_marking_ms," \
-                "time_marking_ns," \
-                "bytes_freed," \
-                "live_objects_with_finalizers," \
-                "objects_in_finalizer_queue," \
-                "time_fin_q_ms," \
-                "time_fin_q_ns," \
-                "time_sweeping_ms," \
-                "time_sweeping_ns," \
-                "time_total_ms," \
-                "time_total_ns," \
-                "finalizers_run," \
-                "finalizers_registered," \
-                "allocated_gc," \
-                "allocated_arc," \
-                "allocated_rc," \
-                "allocated_boxed\n" \
+                "entry_allocated_bytes" \
+                "entry_heap_size," \
+                "entry_bytes_explicitly_freed," \
+                "exit_time_marking_ms," \
+                "exit_time_marking_ns," \
+                "exit_bytes_swept," \
+                "exit_bytes_finalizable," \
+                "exit_bytes_freed_by_finalizer," \
+                "exit_live_objects_with_finalizers," \
+                "exit_objects_in_finalizer_queue," \
+                "exit_time_fin_q_ms," \
+                "exit_time_fin_q_ns," \
+                "exit_time_sweeping_ms," \
+                "exit_time_sweeping_ns," \
+                "exit_time_total_ms," \
+                "exit_time_total_ns," \
+                "exit_heap_size," \
+                "entry_finalizers_run," \
+                "entry_finalizers_elided," \
+                "entry_finalizers_registered," \
+                "entry_allocated_gc," \
+                "entry_allocated_arc," \
+                "entry_allocated_rc," \
+                "entry_allocated_boxed\n" \
             ); \
         } \
     } while (0)
